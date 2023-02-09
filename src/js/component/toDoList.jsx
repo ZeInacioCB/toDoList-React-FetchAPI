@@ -1,4 +1,6 @@
 import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 const ToDoList = ({toDoList}) => {
 
@@ -7,7 +9,7 @@ const ToDoList = ({toDoList}) => {
 	} 
 	
 	const toDoListBuilder = toDoList.map((toDo, index) => {
-		return <li key={index}>{toDo.description}</li>
+		return <li key={index}>{toDo.description} <FontAwesomeIcon icon={faTrash} /></li>
 	})
 
 	return <ul>{toDoListBuilder}</ul>;

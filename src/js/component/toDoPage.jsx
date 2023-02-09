@@ -26,7 +26,7 @@ const ToDoPage = () => {
 	}
 
 	return (
-		<div className="text-center list-group my-2">
+		<div className="text-center list-item my-2">
 			<h1 className="my-5">ToDo List for ToDay</h1>
 			<NewToDoInput
 				value={inputValue}

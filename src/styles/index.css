@@ -1,5 +1,7 @@
+* {
+    border: 1px red solid;
+}
 
-  
 ul {
     list-style-type: none;
     margin: 0;
@@ -39,7 +41,15 @@ input {
     padding: 0.75rem 0;
 }
 
-.list-group {
+.list-item {
     width: 75%;
     margin: 1rem auto;
+    position: relative;
+}
+
+.custom-button {
+    position: absolute;
+    right: 1%;
+    border: none;
+    background-color: inherit;
 }

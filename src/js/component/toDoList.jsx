@@ -1,18 +1,18 @@
-import React, { useState } from "react";
+import React from "react";
 
-const ToDoList = (props) => {
-	const [toDosList, setToDosList] = useState([
-		{description: "Wake up in the morning"},
-		{description: "Make the world a better place"},
-		{description: "Prepare the marketing file"},
-		{description: "Get a way to be in the friday video call"}
-	])
+const ToDoList = ({toDoList}) => {
 
-	const toDoListBuilder = toDosList.map((toDo, index) => {
+	if (toDoList?.length === 0) {
+		return null;
+	} 
+	
+	const toDoListBuilder = toDoList.map((toDo, index) => {
 		return <li key={index}>{toDo.description}</li>
 	})
 
 	return <ul>{toDoListBuilder}</ul>;
+	
+	
 };
 
 export default ToDoList;

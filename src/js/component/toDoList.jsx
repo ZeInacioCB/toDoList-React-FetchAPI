@@ -1,8 +1,8 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 
-const ToDoList = ({toDoList, onClick}) => {
+const ToDoList = ({toDoList, onClick, name}) => {
 
 	if (toDoList?.length === 0) {
 		return null;
@@ -12,7 +12,9 @@ const ToDoList = ({toDoList, onClick}) => {
 		return (
 			<li key={index}>
 				{toDo.description} 
-				<button onClick={onClick} className="custom-button"><FontAwesomeIcon icon={faTrash} /></button> 
+				<button type="button" className="custom-button" onClick={onClick} value={toDo.description} >
+					X
+				</button>
 			</li>)
 	})
 
@@ -22,3 +24,7 @@ const ToDoList = ({toDoList, onClick}) => {
 };
 
 export default ToDoList;
+
+// Asking Edgar why this doesn't work with the FontAwesome inside button.. we can't access the value
+// to insert in the button element
+// <FontAwesomeIcon className="custom-button" icon={faTrashCan} />

@@ -4,28 +4,21 @@ import ToDoList from "./toDoList.jsx";
 //create your first component
 const ToDoPage = () => {
 	const [inputValue, setInputValue] = useState("");
-	const [toDoListDescriptions, setToDoListDescriptions] = useState([
-		{description: "Wake up in the morning"},
-		{description: "Make the world a better place"},
-		{description: "Prepare the marketing file"},
-		{description: "Get a way to be in the friday video call"}
-	]);
+	const [toDoListDescriptions, setToDoListDescriptions] = useState([]);
 
 	const handleClickButton = () => {
 		console.log(inputValue)
 	}
 
 	const handleKeyDown = (e) => {
-		if (e.keyCode == 13) {
-			console.log(inputValue);
-			const newToDo = {
-				description: inputValue
-			}
-			console.log(newToDo);
-			setToDoListDescriptions((prevList) => [
-				...prevList,
-				newToDo
-			]);
+		if (e.key === 'Enter') {
+			// clean and capitalize first letter
+			let cleanInputValue = inputValue.trim().charAt(0).toUpperCase() + inputValue.trim().slice(1);
+			// set new toDo element and add it to the list of ToDo's
+			const newToDo = {description: cleanInputValue}
+			setToDoListDescriptions((prevList) => [...prevList, newToDo]);
+			// cleaning the input value and tag
+			setInputValue("");
 		}
 	}
 
@@ -36,8 +29,8 @@ const ToDoPage = () => {
 				className="text-center my-2"
 				type="text"
 				placeholder="What do you have to do today?"
-				onChange={e => setInputValue(e.target.value)}
 				value={inputValue}
+				onChange={e => setInputValue(e.target.value)}
 				onKeyDown={handleKeyDown}
 			/>
 			<ToDoList toDoList={toDoListDescriptions} />

@@ -43,7 +43,7 @@ const ToDoPage = () => {
 				onKeyDown={handleKeyDown} 
 			/>
 			<ToDoList toDoList={toDoListDescriptions} onClick={handleClickRemove} />
-			<p>You have {toDoListDescriptions.length} more task to do</p>
+			<p className="mt-4 text-start">You have {toDoListDescriptions.length} more task to do</p>
 			<button className="btn btn-primary w-50 m-auto mt-4" onClick={handleClickButton}>Test Consoles</button>
 		</div>
 	);

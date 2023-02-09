@@ -12,9 +12,9 @@ li {
     padding: 0.75rem 0;
 }
 
-li:last-child {
+/*li:last-child {
     border: none;
-}
+}*/
 
 li a {
     text-decoration: none;
@@ -33,7 +33,12 @@ li a:hover {
     background: #f6f6f6;
 }
 
+input {
+    width: 100%;
+    padding: 0.75rem 0;
+}
+
 .list-group {
-    width: 50%;
+    width: 75%;
     margin: 1rem auto;
 }

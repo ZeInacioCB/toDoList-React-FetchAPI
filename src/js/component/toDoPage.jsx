@@ -29,7 +29,8 @@ const ToDoPage = () => {
 	}
 
 	const handleClickRemove = (e) => {
-		const removedItem = e.target.value;
+		const removedItem = e;
+		console.log(removedItem);
 		const newToDoList = toDoListDescriptions.filter((item) => item.description !== removedItem);
     	setToDoListDescriptions(newToDoList);
 	}

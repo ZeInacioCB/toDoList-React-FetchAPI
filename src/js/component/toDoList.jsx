@@ -1,27 +1,39 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { useState } from "react";
 
-const ToDoList = ({toDoList, onClick, name}) => {
+const ToDoList = ({toDoList, onClick}) => {
 
 	if (toDoList?.length === 0) {
 		return null;
 	} 
 	
 	const toDoListBuilder = toDoList.map((toDo, index) => {
-		return (
-			<li key={index}>
-				{toDo.description} 
-				<button type="button" className="custom-button" onClick={onClick} value={toDo.description} >
-					X
-				</button>
-			</li>)
+		return <ToDoItem key={index} toDo={toDo.description} onClick={()=> onClick(toDo.description)} />	
 	})
 
 	return <ul>{toDoListBuilder}</ul>;
-	
-	
 };
+
+const ToDoItem = ( { toDo, onClick }) => {
+	const [visible, setVisible] = useState({visibility: "hidden"});
+
+	return (
+		<li 
+			onMouseEnter={() => setVisible({visibility: "visible"})}
+			onMouseLeave={() => setVisible({visibility: "hidden"})} >
+			{toDo} 
+			<button 
+				type="button" 
+				className="custom-button" 
+				onClick={()=> onClick(toDo)} 
+				style={visible}
+				>
+				<FontAwesomeIcon className="custom-button" icon={faTrashCan} />
+			</button>
+		</li>)	
+}
 
 export default ToDoList;
 

@@ -50,9 +50,12 @@ input {
     background-color: inherit;
     border: none;
     color:#1F1D36;
+    
 }
 
 .custom-button:hover {
     color: #864879;
     cursor: pointer;
+    z-index: 5;
 }
+

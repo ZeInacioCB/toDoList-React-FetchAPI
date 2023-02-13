@@ -36,7 +36,3 @@ const ToDoItem = ( { toDo, onClick }) => {
 }
 
 export default ToDoList;
-
-// Asking Edgar why this doesn't work with the FontAwesome inside button.. we can't access the value
-// to insert in the button element
-// <FontAwesomeIcon className="custom-button" icon={faTrashCan} />

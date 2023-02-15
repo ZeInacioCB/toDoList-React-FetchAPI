@@ -10,7 +10,7 @@ const ToDoList = ({toDoList, onClick}) => {
 	} 
 	
 	const toDoListBuilder = toDoList.map((toDo, index) => {
-		return <ToDoItem key={index} toDo={toDo.description} onClick={()=> onClick(toDo.description)} />	
+		return <ToDoItem key={toDo.id} toDo={toDo.label} onClick={()=> onClick(toDo.label)} />	
 	})
 
 	return <ul>{toDoListBuilder}</ul>;

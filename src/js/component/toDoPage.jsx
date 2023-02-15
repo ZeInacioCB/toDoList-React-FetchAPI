@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ToDoList from "./toDoList.jsx";
 import NewToDoInput from "./newToDoInput.jsx";
 
@@ -11,6 +11,47 @@ const ToDoPage = () => {
 		{description: "Cleaning the socks"},
 		{description: "Wash the dishes"}
 	]);
+	// trying the new fetch
+	const initList = [{id: 0, label: "lets wash this dishes", done: false}];
+	const [list, setList] = useState(initList)
+
+	const apiURL = "https://assets.breatheco.de/apis/fake/todos/user/ZeInacioCB";
+
+
+	// initialize new list if no list exists
+	// should probably use this just once to initialize the API
+	// confirm with Edgar, as this throws an error 400 or 500 if using mode: no-cors
+	useEffect(() => { 
+		fetch(apiURL, {
+			//mode: "no-cors",
+			method: "POST",
+			headers: {"Content-Type": "application/json"},
+			body: JSON.stringify(initList)
+		})
+		.then(response => {
+			//console.log(response);
+			if (!response.ok) throw new Error("something went wrong. What is it Edgar?")})
+		.catch(err => {
+			//console.log(err)
+		})
+	}, []);
+	
+
+	//update itemList state w/ backend data
+	useEffect(() => { 
+		fetch(apiURL)
+		.then(resp => {
+			console.log('resp:',resp);
+			return resp.json()})
+		.then(data => {
+			console.log('data:', data);
+			const newList = data.map((a, index) => {
+				return {...a, id: index}
+			});
+			console.log('newList:', newList);
+			console.log('random array:', [{label: 'try', why: 'try'}])
+			setList(newList)})
+	}, []);
 
 	const handleClickButton = () => {
 		console.log(inputValue)

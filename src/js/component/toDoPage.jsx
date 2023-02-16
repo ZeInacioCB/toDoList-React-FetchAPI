@@ -4,57 +4,67 @@ import NewToDoInput from "./newToDoInput.jsx";
 
 //create your first component
 const ToDoPage = () => {
-	// useState hook to setup the input as a controlled variable
+	// useState hook to setup the input as a controlled variable and a toDo list as an empty array
 	const [inputValue, setInputValue] = useState("");
-	// setting the list of todo's descriptions
-	const [toDoListDescriptions, setToDoListDescriptions] = useState([
-		{description: "Cleaning the socks"},
-		{description: "Wash the dishes"}
-	]);
-	// trying the new fetch
-	const initList = [{id: 0, label: "lets wash this dishes", done: false}];
-	const [list, setList] = useState(initList)
-
-	const apiURL = "https://assets.breatheco.de/apis/fake/todos/user/ZeInacioCB";
-
+	const [toDoList, setToDoList] = useState([]);
+	// defining the API Url endpoint
+	const apiUrl = "https://assets.breatheco.de/apis/fake/todos/user/ZeInacioCB";
 
 	// initialize new list if no list exists
 	// should probably use this just once to initialize the API
 	// confirm with Edgar, as this throws an error 400 or 500 if using mode: no-cors
-	useEffect(() => { 
-		fetch(apiURL, {
-			//mode: "no-cors",
-			method: "POST",
-			headers: {"Content-Type": "application/json"},
-			body: JSON.stringify(initList)
-		})
-		.then(response => {
-			//console.log(response);
-			if (!response.ok) throw new Error("something went wrong. What is it Edgar?")})
-		.catch(err => {
-			//console.log(err)
-		})
-	}, []);
-	
 
-	//update itemList state w/ backend data
+	// Update the empty list with the toDos stored in the API backend
+	// try to use async await
 	useEffect(() => { 
-		fetch(apiURL)
+		fetch(apiUrl)
 		.then(resp => {
-			console.log('resp:',resp);
-			return resp.json()})
+			if (!resp.ok) {
+				fetch(apiUrl, {
+					method: "POST",
+					headers: {"Content-Type": "application/json"},
+					body: '[]'
+				})
+				.then(response => {
+					console.log('response from 1st POST:', response.clone());
+					if (!response.ok) throw new Error("Something went wrong. What is it Edgar? A user and a list already created?");
+					else return response.json();
+				})
+				.then(data => {console.log('First POST to create the list:', data)})
+				.catch(error => {
+					console.log(error)
+				});
+			}
+			else return resp.json()
+		})
 		.then(data => {
-			console.log('data:', data);
-			const newList = data.map((a, index) => {
-				return {...a, id: index}
-			});
-			console.log('newList:', newList);
-			console.log('random array:', [{label: 'try', why: 'try'}])
-			setList(newList)})
+			console.log('The 1st update:', data);
+			setToDoList(data)})
 	}, []);
+
+	// Update toDos list in the backend everytime the current toDoList is changed!
+    const updateBackend = (newlist) => {
+		fetch(apiUrl, {
+			method: "PUT",
+			body: JSON.stringify(newlist),
+			headers: {
+				"Content-Type": "application/json"
+			}
+		})
+		.then(resp => resp.json())
+    	.then(data => { //here is were your code should start after the fetch finishes
+			console.log('Backend updated:', data); //this will print on the console the exact object received from the server
+    	})
+    	.catch(error => { // error handling
+			console.log('Error with the update:', error);
+    	});
+	}
 
 	const handleClickButton = () => {
-		console.log(inputValue)
+		fetch(apiUrl)
+			.then(resp => resp.json())
+			.then(data => {console.log(data)})
+			.catch(error => {console.log('error from GET:', error)});
 	}
 
 	const handleKeyDown = (e) => {
@@ -62,8 +72,10 @@ const ToDoPage = () => {
 			// clean and capitalize first letter
 			let cleanInputValue = inputValue.trim().charAt(0).toUpperCase() + inputValue.trim().slice(1);
 			// set new toDo element and add it to the list of ToDo's
-			const newToDo = {description: cleanInputValue}
-			setToDoListDescriptions((prevList) => [newToDo, ...prevList]);
+			const newToDo = {label: cleanInputValue, done: false}
+			setToDoList((prevList) => [newToDo, ...prevList]);
+			// update bakend
+			updateBackend([newToDo, ...toDoList]);
 			// cleaning the input value and tag
 			setInputValue("");
 		}
@@ -72,8 +84,20 @@ const ToDoPage = () => {
 	const handleClickRemove = (e) => {
 		const removedItem = e;
 		console.log(removedItem);
-		const newToDoList = toDoListDescriptions.filter((item) => item.description !== removedItem);
-    	setToDoListDescriptions(newToDoList);
+		const newToDoList = toDoList.filter((item) => item.label !== removedItem);
+    	setToDoList(newToDoList);
+		updateBackend(newToDoList);
+	}
+
+	const handleDeleteButton = () => {
+		fetch(apiUrl, {
+			method: "DELETE",
+			headers: {"Content-Type": "application/json"}
+		})
+		.then(resp => resp.json())
+		.then(data => {console.log(data)})
+		.catch(error => {console.log(error)})
+		setToDoList([]);
 	}
 
 	return (
@@ -84,9 +108,10 @@ const ToDoPage = () => {
 				onChange={e => setInputValue(e.target.value)}
 				onKeyDown={handleKeyDown} 
 			/>
-			<ToDoList toDoList={toDoListDescriptions} onClick={handleClickRemove} />
-			<p className="mt-4 text-start">You have {toDoListDescriptions.length} more task to do</p>
-			<button className="btn btn-primary w-50 m-auto mt-4" onClick={handleClickButton}>Test Consoles</button>
+			<ToDoList toDoList={toDoList} onClick={handleClickRemove} />
+			<p className="mt-4 text-start">You have {toDoList.length} more task to do</p>
+			<button className="btn btn-danger w-50 m-auto mt-4 mx-2" onClick={handleDeleteButton}>Delete Everything</button>
+			<button className="btn btn-info w-50 m-auto mt-4 mx-2" onClick={handleClickButton}>Test Consoles</button>
 		</div>
 	);
 };
